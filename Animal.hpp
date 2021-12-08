@@ -19,4 +19,5 @@ class Animal{
 
     std::string name;
 
+    Animal * p_next;
 };

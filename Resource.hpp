@@ -16,4 +16,6 @@ class Resource{
     char symbol;
 
     std::string name;
+
+    Resource * p_next;
 };
