@@ -1,23 +1,15 @@
 #include <string>
+//#include "Object.hpp"
 
 class Animal{
     public:
+        Animal(int xpValue, int strenthValue, char animalSymbol, std::string animalName);
 
-    Animal(int xpValue, int strengthValue, char animalSymbol, std::string animalName);
-
-    ~Animal();
-
-    void place (int x, int y);
+        ~Animal();
 
     private:
+        Animal * p_next;
 
-    int xp;
+    protected:
 
-    int strength;
-
-    char symbol;
-
-    std::string name;
-
-    Animal * p_next;
 };

@@ -1,21 +1,14 @@
 #include <string>
+//#include "Object.hpp"
 
 class Resource{
     public:
+        Resource();
 
-    Resource(int xpValue, char resourceSymbol, std::string resourceName);
+        ~Resource();
 
-    ~Resource();
-
-    void place(int x, int y);
+        void place(int x, int y);
 
     private:
-
-    int xp;
-
-    char symbol;
-
-    std::string name;
-
-    Resource * p_next;
+        Resource * p_next;
 };
