@@ -1,4 +1,6 @@
 #include <iostream>
+#include <ctime>
+#include <conio.h>
 #include "Object.hpp"
 
 int main();
@@ -14,8 +16,8 @@ int * searchAnimal(Object*); // Finds coords of the Animal on screen
 int * searchResource(Object*); // Finds coords of the resource on screen
 void printBoard(Object*, std::size_t, std::size_t);
 void assignBoard(Object*&, std::size_t, std::size_t);
-void updateBoard(Object*&, std::size_t, std::size_t, Object*);
-char * generateLine(char);
+void updateBoard(Object*&, std::size_t, std::size_t, Object*, char);
+Object * generateLine(char);
 
 //Getters and Setters
 char Object::get_symbol() const{ return this->symbol; }
@@ -41,22 +43,64 @@ void play(){
     Object* gameBoard{new Object [xdim*ydim]};
     Object* lion = new Object(100, 100, 'L', "Lion");
     //Resource * gold = new Resource(100, 100, 'G', "Gold");
-
     assignBoard(gameBoard, xdim, ydim);
-    printBoard(gameBoard, xdim, ydim);
+    char input;
+    while (input != 'x'){
+        printBoard(gameBoard, xdim, ydim);
+        input = getch();
+        if (input == 'w'){
+            updateBoard(gameBoard, xdim, ydim, generateLine('1'), 'U');
+        }
+        else if (input == 'a'){
+            updateBoard(gameBoard, xdim, ydim, generateLine('2'), 'L');
+        }
+        else if (input == 's'){
+            updateBoard(gameBoard, xdim, ydim, generateLine('1'), 'D');
+        }   
+        else if (input == 'd'){
+            updateBoard(gameBoard, xdim, ydim, generateLine('2'), 'R');
+        }
+        //_sleep(100);
+    }
+
+    // assignBoard(gameBoard, xdim, ydim);
+    // printBoard(gameBoard, xdim, ydim);
+
+    // std::cout << "break" << std::endl;
+    // updateBoard(gameBoard, xdim, ydim, generateLine('1'), 'L');
+    // updateBoard(gameBoard, xdim, ydim, generateLine('1'), 'D');
+    // //updateBoard(gameBoard, xdim, ydim, generateLine('1'), 'L');
+    // printBoard(gameBoard, xdim, ydim);
 }
 
 void move(){
-
+    
 }
 
 void printBoard(Object * board, std::size_t xdim, std::size_t ydim){
-
+    system("cls");
     for (int y = 0 ; y < ydim ; y++){
 
         for (int x = 0 ; x < xdim ; x++){
-
-            if (x == xdim - 1){
+            if ((x + y*xdim) == ( ((xdim * ydim)/2) + (xdim/2) )){
+                std::cout << "O";
+            }
+            else if((x + y*xdim) == ( ((xdim * ydim)/2) + (xdim/2) + xdim )){
+                std::cout << "|";
+            }
+            else if((x + y*xdim) == ( ((xdim * ydim)/2) + (xdim/2) + xdim + 1 )){
+                std::cout << "-";
+            }
+            else if((x + y*xdim) == ( ((xdim * ydim)/2) + (xdim/2) + xdim - 1 )){
+                std::cout << "-";
+            }
+            else if((x + y*xdim) == ( ((xdim * ydim)/2) + (xdim/2) + 2*xdim - 1 )){
+                std::cout << "/";
+            }
+            else if((x + y*xdim) == ( ((xdim * ydim)/2) + (xdim/2) + 2*xdim + 1 )){
+                std::cout << "\\";
+            }
+            else if (x == xdim - 1){
                 std::cout << board[x + y*xdim].get_symbol() << std::endl;
             }
             else{
@@ -67,25 +111,113 @@ void printBoard(Object * board, std::size_t xdim, std::size_t ydim){
 }
 
 void assignBoard(Object * & board, std::size_t xdim, std::size_t ydim){
-
+    // srand(time(0));
     for (int y = 0 ; y < ydim ; y++){
 
         for (int x = 0 ; x < xdim ; x++){
 
-            board[x + y*xdim].set_symbol('.');
+            board[x + y*xdim].set_symbol('.');//(rand() % 10) + 65);
         }
     }
 
     //random function to place animals and resources randomly
 }
 
-void updateBoard(Object * & board, std::size_t xdim, std::size_t ydim, Object * newLine){
-    board[(xdim * ydim)/2].set_symbol('O'); //Head
+void updateBoard(Object * & board, std::size_t xdim, std::size_t ydim, Object * newLine, char direction){
+    
+    // board[((xdim * ydim)/2) + (xdim/2)].set_symbol('.'); //Head
+    // board[((xdim * ydim)/2) + (xdim/2) + xdim].set_symbol('.');
+    // board[((xdim * ydim)/2) + (xdim/2) + xdim - 1].set_symbol('.');
+    // board[((xdim * ydim)/2) + (xdim/2) + xdim + 1].set_symbol('.');
+    // board[((xdim * ydim)/2) + (xdim/2) + xdim - 2].set_symbol('.');
+    // board[((xdim * ydim)/2) + (xdim/2) + xdim + 2].set_symbol('.');
+    // board[((xdim * ydim)/2) + (xdim/2) + 2*xdim - 1].set_symbol('.');
+    // board[((xdim * ydim)/2) + (xdim/2) + 2*xdim + 1].set_symbol('.');
+
+    // std::cout << std::endl; // For testing
+    // printBoard(board, xdim, ydim);
+    // std::cout << std::endl;
+
+    // Movement
+    if (direction == 'L'){
+        // Left side
+        for (int j = xdim ; j > 1; j--){
+            for (int i = 0 ; i < ydim ; i++){
+                board[(j-1) + i*(xdim-1)] = board[(j-2) + i*(xdim-1)];
+            }
+        }
+
+        for (int i = 0 ; i < ydim ; i++){
+            board [xdim*i] = newLine[i];
+        }
+    }
+    else if (direction == 'R'){
+        // Right side
+        for (int j = 0 ; j < xdim - 1; j++){
+            for (int i = 0 ; i < ydim ; i++){
+                board[j + i*xdim] = board[j + 1 + i*xdim];
+            }
+        }
+
+        for (int i = 0 ; i < ydim ; i++){
+            board [(xdim-1) + xdim*i] = newLine[i];
+        }
+    }
+    else if (direction == 'D'){
+        // Bottom
+        for (int j = 0 ; j < ydim - 1; j++){
+            for (int i = 0 ; i < xdim ; i++){
+                board[j*xdim + i] = board[(j+1)*xdim + i];
+            }
+        }
+
+        for (int i = 0 ; i < xdim ; i++){
+            board [xdim*(ydim-1) + i] = newLine[i];
+        }
+    }
+    else if (direction == 'U'){
+        // Top 
+        for (int j = ydim - 1 ; j > 1; j--){
+            for (int i = 0 ; i < xdim ; i++){
+                board[(j-1)*xdim + i] = board[(j-2)*xdim + i];
+            }
+        }
+
+        for (int i = 0 ; i < xdim ; i++){
+            board [i] = newLine[i];
+        }
+    }
+
+    //board[((xdim * ydim)/2) + (xdim/2)].set_symbol('O'); //Head
+    //board[((xdim * ydim)/2) + (xdim/2) + xdim].set_symbol('|');
+    //board[((xdim * ydim)/2) + (xdim/2) + xdim - 1].set_symbol('-');
+    //board[((xdim * ydim)/2) + (xdim/2) + xdim + 1].set_symbol('-');
+    //board[((xdim * ydim)/2) + (xdim/2) + xdim - 2].set_symbol('-');
+    //board[((xdim * ydim)/2) + (xdim/2) + xdim + 2].set_symbol('-');
+    //board[((xdim * ydim)/2) + (xdim/2) + 2*xdim - 1].set_symbol('/');
+    //board[((xdim * ydim)/2) + (xdim/2) + 2*xdim + 1].set_symbol('\\');
 
 }
 
-char * generateLine(char orientation){
-    char* line = new char [20];
+Object * generateLine(char orientation){
+    //srand(time(0));
+    std::string names[6]{"Li", "BI", "AI", "GI", "DI", "FI"}; // testing
+    char symbols[6]{'L', 'B', 'A', 'G', 'D', 'F'};
+    int r = 0; // stores random number
+    
+    Object* line = new Object [50];
+
+    for (int i = 0 ; i < 50 ; i++){
+
+        r = rand() % 6;
+
+        line[i].set_symbol('.');
+        if ((rand() % 30) == 1){
+
+            line[i].set_symbol( symbols[r]);
+            line[i].set_name(names[r]);
+        }
+    }
     return line;
 }
 
