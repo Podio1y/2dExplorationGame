@@ -124,7 +124,6 @@ void assignBoard(Object * & board, std::size_t xdim, std::size_t ydim){
 }
 
 void updateBoard(Object * & board, std::size_t xdim, std::size_t ydim, Object * newLine, char direction){
-    
     // board[((xdim * ydim)/2) + (xdim/2)].set_symbol('.'); //Head
     // board[((xdim * ydim)/2) + (xdim/2) + xdim].set_symbol('.');
     // board[((xdim * ydim)/2) + (xdim/2) + xdim - 1].set_symbol('.');
@@ -216,6 +215,8 @@ Object * generateLine(char orientation){
 
             line[i].set_symbol( symbols[r]);
             line[i].set_name(names[r]);
+            line[i].set_xp(rand() % 100);
+            line[i].set_strength(rand() % 1000);
         }
     }
     return line;
